@@ -14,7 +14,7 @@ public class ClinicaodontologicaApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ClinicaodontologicaApplication.class, args);
-		LOGGER.error("Este es un mensaje de debug para verificar la configuración de log4j.");
+		LOGGER.info("Clinica Odontologica iniciada correctamente!");
 	}
 
 
