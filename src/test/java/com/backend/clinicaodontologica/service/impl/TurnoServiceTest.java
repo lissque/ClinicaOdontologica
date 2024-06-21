@@ -7,6 +7,8 @@ import com.backend.clinicaodontologica.dto.entrada.TurnoEntradaDTO;
 import com.backend.clinicaodontologica.dto.salida.OdontologoSalidaDTO;
 import com.backend.clinicaodontologica.dto.salida.PacienteSalidaDTO;
 import com.backend.clinicaodontologica.dto.salida.TurnoSalidaDTO;
+import com.backend.clinicaodontologica.entity.Odontologo;
+import com.backend.clinicaodontologica.entity.Paciente;
 import com.backend.clinicaodontologica.exceptions.BadRequestException;
 import com.backend.clinicaodontologica.exceptions.ResourceNotFoundException;
 import com.backend.clinicaodontologica.service.IOdontologoService;
@@ -39,7 +41,7 @@ class TurnoServiceTest {
 
     @Test
     @Order(1)
-    void registrarTurno() throws BadRequestException {
+    void registrarTurno() throws BadRequestException, ResourceNotFoundException {
         // Guardar primero el domicilio, paciente y odontologo
         DomicilioEntradaDTO domicilioEntradaDTO = new DomicilioEntradaDTO("Avenida", 12, "Sur", "Quindio");
         PacienteEntradaDTO pacienteEntradaDTO = new PacienteEntradaDTO("Lissette", "Quebrada", "123456", LocalDate.now(), domicilioEntradaDTO);
@@ -48,8 +50,11 @@ class TurnoServiceTest {
         OdontologoEntradaDTO odontologoEntradaDTO = new OdontologoEntradaDTO("1234568", "MARIO", "JIMENEZ");
         OdontologoSalidaDTO odontologoGuardado = odontologoService.registrarOdontologo(odontologoEntradaDTO);
 
+        PacienteSalidaDTO pacienteSalidaDTO = pacienteService.buscarPacientePorId(pacienteGuardado.getId());
+        OdontologoSalidaDTO odontologoSalidaDTO = odontologoService.buscarOdontologoPorId(odontologoGuardado.getId());
+
         // Crear el Turno con el Paciente y Odontologo guardados
-        TurnoEntradaDTO turnoEntradaDTO = new TurnoEntradaDTO(LocalDate.now(), pacienteGuardado, odontologoGuardado);
+        TurnoEntradaDTO turnoEntradaDTO = new TurnoEntradaDTO(LocalDate.now(), pacienteSalidaDTO, odontologoSalidaDTO);
         TurnoSalidaDTO turnoGuardado = turnoService.registrarTurno(turnoEntradaDTO);
 
         assertNotNull(turnoGuardado);
